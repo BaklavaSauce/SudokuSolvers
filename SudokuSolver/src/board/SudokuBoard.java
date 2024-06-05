@@ -73,7 +73,12 @@ public class SudokuBoard{
 		this.board = board;
 	}
 	
-	public void fillSudoku() {
+	public void setBoardAt(int i, int j, int num) {
+		this.board[i][j] = num;
+	}
+	
+	/*Implementation should be revised*/
+	/*public void fillSudoku() {
 		int v = 0;
 		for(int i = 0; i < this.size; i++){
 			for(int j = 0; j < this.size; j++){
@@ -82,24 +87,37 @@ public class SudokuBoard{
 					board[i][j] = v;	
 			}
 		}
-	}
-
-	private boolean isValid(int i, int j, int v) {
-		for(int c = 0; c < board.length; c++) 	
-			if(board[c][j] == v || board[i][c] == v)
-				return false;
-		int r = (i / this.regRowSize) * this.regRowSize;
-		int rBound = r + this.regRowSize;
-		int c = (j / this.regColSize) * this.regColSize;
-		int cBound = c + this.regColSize;
-		for(int r1 = r; r1 < rBound; r1++) {
-			for(int c1 = c; c1 < cBound; c1++) {
-				if(board[r1][c1] == v)
+	}*/
+	
+	public boolean isValid() {
+		for(int i = 0; i < this.size; i++) {
+			for(int j = 0; j < this.size; j++) {
+				if(!isValid(i, j, this.board[i][j]) && this.board[i][j] != 0)
 					return false;
 			}
 		}
 		return true;
 	}
+
+	private boolean isValid(int i, int j, int v) {
+		//check row and column simultaneosly
+		for(int c = 0; c < board.length; c++) 	
+			if((c != i && board[c][j] == v) || (c != j && board[i][c] == v))
+				return false;
+		int r = (i / this.regRowSize) * this.regRowSize;
+		int rBound = r + this.regRowSize;
+		int c = (j / this.regColSize) * this.regColSize;
+		int cBound = c + this.regColSize;
+		//check region
+		for(int r1 = r; r1 < rBound; r1++) {
+			for(int c1 = c; c1 < cBound; c1++) {
+				if((r1 != i && c1 != j) && board[r1][c1] == v)
+					return false;
+			}
+		}
+		return true;
+	}
+
 
 	@Override
 	public String toString() {
@@ -131,6 +149,5 @@ public class SudokuBoard{
 		}
 		return newBoard;
 	}
-	
-	
 }
+
